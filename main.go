@@ -7,6 +7,9 @@ import (
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 )
 
+const vgaWidth = 640
+const vgaHeight = 480
+
 type Game struct{}
 
 func (g *Game) Update() error {
@@ -18,11 +21,12 @@ func (g *Game) Draw(screen *ebiten.Image) {
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
-	return 320, 240
+	s := ebiten.Monitor().DeviceScaleFactor()
+	return int(float64(outsideWidth) * s), int(float64(outsideHeight) * s)
 }
 
 func main() {
-	ebiten.SetWindowSize(640, 480)
+	ebiten.SetWindowSize(vgaWidth, vgaHeight)
 	ebiten.SetWindowTitle("Hello, World!")
 	if err := ebiten.RunGame(&Game{}); err != nil {
 		log.Fatal(err)
